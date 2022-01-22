@@ -97,7 +97,6 @@ export const DetailsScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TopNavigation title='Notes' alignment='center'/>
       <Divider/>
       <Layout style={styles.view}>
         <ScrollView>

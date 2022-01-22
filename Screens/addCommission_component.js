@@ -87,7 +87,6 @@ export const EditCommissionScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.view}>
-      <TopNavigation title='MyApp' alignment='center' accessoryLeft={BackAction}/>
       <Divider/>
       <Layout style={styles.screen}>
         <Input style={styles.input} accessoryRight={TitleIcon} defaultValue={commissionTitle} placeholder="Title" onChangeText={setCommissionTitle}></Input>

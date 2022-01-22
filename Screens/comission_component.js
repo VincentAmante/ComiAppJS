@@ -76,7 +76,6 @@ export const CommissionScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title='MyApp' alignment='center' accessoryLeft={BackAction}/>
       <Divider/>
       <Layout style={styles.screen}>
         <Text category='h1'>{commissionTitle}</Text>
