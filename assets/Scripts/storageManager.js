@@ -12,6 +12,7 @@ export const getData = async (key) => {
         console.log(err);
     }
 }
+
 // Sets data in storage
 export const setData = async (key, value) => {
     try {
@@ -26,7 +27,6 @@ export const storeArray = async (value) => {
       const jsonValue = JSON.stringify(value)
       await AsyncStorage.setItem('@id_List', jsonValue)
     } catch (e) {
-      // saving error
     }
   }
 
@@ -47,18 +47,14 @@ export const getArray = async () => {
     } catch(e) {
       // remove error
     }
-  
-    console.log('Done.')
   }
 
   export const getIdList = async () => {
     const idList = await getArray();
     console.log(idList);
     if (idList == null){
-      console.log("It's empty")
       let array = [];
       storeArray(array);
     }
-    console.log("made it to the end");
     return idList;
   }

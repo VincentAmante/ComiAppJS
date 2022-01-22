@@ -9,40 +9,65 @@ import { Divider,
   TopNavigationAction, 
   Card,
   Button } from '@ui-kitten/components';
-import { setData, getData } from '../assets/Scripts/storageManager';
+import { setData, getData, removeValue, getIdList, storeArray } from '../assets/Scripts/storageManager';
 
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
 );
-const SampleIcon = (props) => (
-  <Icon name='smiling-face-outline' {...props} />
+const DeleteIcon = (props) => (
+  <Icon name='trash-outline' {...props} />
   );
+
+const EditIcon = (props) => (
+  <Icon name='edit-outline' {...props} />
+  );
+  
 
 export const CommissionScreen = ({ navigation }) => {
 
   const [commissionTitle, setCommissionTitle] = useState(" ");
-  const [commissioner, setCommissioner] = useState(" ");
-  const [dueDate, setDueDate] = useState(" ");
   const [details, setDetails] = useState(" ");
+  const [forceRender, setForceRender] = useState(0);
 
   // Acquires selected commission's details on load
     useEffect(async () => {
       setCommissionTitle(await getData(global.selectedId + '_comissionTitle'));
-      setCommissioner(await getData(global.selectedId + '_comissioner'));
-      setDueDate(await getData(global.selectedId + '_dueDate'));
       setDetails(await getData(global.selectedId + '_details'));
-    });
+
+      if (forceRender < 2){
+        setForceRender(forceRender + 1);
+      }
+    }, [forceRender]);
 
     const [sample, setSample] = useState("Sample");
     const handleButton = async () => {
-     setData(global.selectedId + '_comissionTitle', global.selectedId + '_comissionTitle');
-     setData(global.selectedId + '_comissioner', global.selectedId + '_comissioner');
-     setData(global.selectedId + '_dueDate', global.selectedId + '_dueDate');
-     setData(global.selectedId + '_details', global.selectedId + '_details');
+      let idList = [];
+      // To make asynced array modifiable
+      let newArr = [];
+
+      idList = await getIdList();
+      newArr = [...idList];
+
+      console.log("Attempting to delete");
+     removeValue(global.selectedId + '_comissionTitle');
+     removeValue(global.selectedId + '_comissioner');
+
+     setForceRender(0);
+     for (let i = 0; i < newArr.length; i++){
+       if (newArr[i] === global.selectedId){
+         newArr.splice(i, 1);
+         console.log("removed: " + global.selectedId);
+         global.selectedId = ' ';
+       }
+     }
+
+     console.log(newArr);
+     navigateBack();
+     storeArray(newArr);
     }
     
     const navigateBack = () => {
-    navigation.goBack();
+    navigation.navigate('Home');
   };
 
   const BackAction = () => (
@@ -54,22 +79,13 @@ export const CommissionScreen = ({ navigation }) => {
       <TopNavigation title='MyApp' alignment='center' accessoryLeft={BackAction}/>
       <Divider/>
       <Layout style={styles.screen}>
-        <Card>
-          <Text category='h1'>{commissionTitle}</Text>
-          <Text category='s1'>{commissioner}</Text>
-          <Text category='s1'>Comission ID</Text>
-        </Card>
-        <Card style={styles.card}>
-          <Text>Due in..</Text>
-          <Text category='h1'>{dueDate}</Text>
-          <Text category='s1'>Days</Text>
-        </Card>
-        <Card>
-          <Text category='h2'>Details</Text>
-          <Divider/>
+        <Text category='h1'>{commissionTitle}</Text>
+        <Card style={styles.note}>
           <Text>{details}</Text>
         </Card>
-        <Button accessoryLeft={SampleIcon} onPress={handleButton}>Set States</Button>
+        <Layout style={styles.buttons}>
+        <Button style={styles.button} status='danger'accessoryLeft={DeleteIcon} onPress={handleButton}>Delete</Button>
+        </Layout>
       </Layout>
     </SafeAreaView>
   );
@@ -85,5 +101,19 @@ const styles = StyleSheet.create({
     margin:20,
     borderColor:'#fff',
     borderRadius:10,
+  },
+  note:{
+    minWidth:300,
+    minHeight:350,
+    padding:10,
+    borderRadius:20,
+    marginVertical:20,
+  },
+  buttons:{
+    flexDirection:'row',
+    alignContent:'space-between'
+  },
+  button:{
+    marginHorizontal:10,
   }
 })
