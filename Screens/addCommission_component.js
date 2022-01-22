@@ -105,9 +105,11 @@ const styles = StyleSheet.create({
   screen:{
     flex: 1, 
     flexGrow:1,
+    borderColor:'#fff',
     justifyContent:'center', 
     alignItems: 'center', 
     padding: 20,
+    paddingTop:50,
   },
   input:{
     marginVertical:20,

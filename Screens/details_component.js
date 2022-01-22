@@ -24,6 +24,7 @@ const getIDs = async () => {
   idList = [...idListData];
   return;
 }
+
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
 ); 
